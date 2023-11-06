@@ -34,7 +34,7 @@ ROBOTSTXT_OBEY = True
 #COOKIES_ENABLED = False
 
 # Disable Telnet Console (enabled by default)
-#TELNETCONSOLE_ENABLED = False
+TELNETCONSOLE_ENABLED = False
 
 # Override the default request headers:
 #DEFAULT_REQUEST_HEADERS = {
@@ -68,7 +68,7 @@ ROBOTSTXT_OBEY = True
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
-#AUTOTHROTTLE_ENABLED = True
+AUTOTHROTTLE_ENABLED = True
 # The initial download delay
 #AUTOTHROTTLE_START_DELAY = 5
 # The maximum download delay to be set in case of high latencies
@@ -87,12 +87,17 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 DEFAULT_REQUEST_HEADERS = {
-        'sec-ch-ua': '"Google Chrome";v="111", "Not(A:Brand";v="8", "Chromium";v="111"',
+        'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
         'Accept': 'application/json, text/plain, /',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Accept-Language':'vi-VN,vi;q=0.9,fr-FR;q=0.8,fr;q=0.7,en-US;q=0.6,en;q=0.5',
         'sec-ch-ua-mobile': '?0',
         'authorization': 'Apikey 567e8e97e3739a83267ff1c221a88f9f0460f0b76cc6ef7dc5929565d26f8f4c',
-        'user-agent': "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36" ,
-        'sec-ch-ua-platform': '"Windows"'
+        'sec-ch-ua-platform': '"Linux"',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site':'same-origin',
+        'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
 }
 
 KAFKA_PRODUCER_BROKERS = ['localhost:9092']
@@ -101,6 +106,6 @@ KAFKA_TOPIC = 'product-tiki'
 FEED_EXPORT_ENCODING = 'utf-8'
 
 ITEM_PIPELINES = {
-    'TikiCrawl.pipelines.KafkaPipeline': 300,  # Sử dụng số thứ tự ưu tiên tùy ý
+    'TikiCrawl.pipelines.MongoDBPipeline': 300,  # Sử dụng số thứ tự ưu tiên tùy ý
 }
 

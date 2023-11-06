@@ -3,21 +3,17 @@ import scrapy
 import re
 
 from scrapy.http import Request
-# from tikiscraper.items import ProductItem
 import json
 from time import sleep
 from urllib.parse import urlencode
-
-import requests 
 
 class TikispiderSpider(scrapy.Spider):
     name = "tikispider"
     allowed_domains = ["tiki.vn"]
     start_urls = ["https://api.tiki.vn/raiden/v2/menu-config?platform=desktop"]
     custom_settings = {
-        'FEEDS' : {
-            'product_tiki.json' : {'format' : 'json', 'overwrite' : True}
-        }
+        'CONCURRENT_REQUESTS': 10,
+        'CONCURRENT_REQUESTS_PER_DOMAIN': 4,
     }
     def parse(self, response):
         category_id_list = re.findall('/c(\d+)"', response.text)
@@ -25,7 +21,7 @@ class TikispiderSpider(scrapy.Spider):
         for category_id in category_id_list:
             page = 1
             while page <= 50:
-                url_category = f'https://tiki.vn/api/personalish/v1/blocks/listings?limit=40&include=advertisement&category={category_id}&page={page}'
+                url_category = f'https://tiki.vn/api/personalish/v1/blocks/listings?category={category_id}&page={page}'
                 page+=1
                 yield response.follow(url=url_category, callback=self.parse_page)
 
@@ -42,11 +38,14 @@ class TikispiderSpider(scrapy.Spider):
             except json.JSONDecodeError as e:
                 with open("crawler.log", mode="a") as log:
                     log.write(f"JSON Decode Error: {e}: {response}\n")
+            else:
+                yield data_product
         else:
             with open("crawler.log", mode="a") as log:
                 log.write(f'Status Code {response.status}')
             return
-        yield data_product
+
+
 
 
         
